@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase'; // <-- YEH LINE THEEK KAR DI GAYI HAI
+import { auth } from '@/lib/firebase'; 
 
 // Import the Google Sign-In component
-import GoogleSignIn from '@/component/GoogleSignIn'; 
+import GoogleSignIn from '@/components/GoogleSignIn'; 
 
 // ShadCN UI Components
 import { Button } from '@/components/ui/button';
