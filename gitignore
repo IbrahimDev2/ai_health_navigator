@@ -1,0 +1,35 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js build output
+/.next/
+/out/
+
+# Production artifacts
+/build
+R
+# TypeScript
+/dist
+/tsconfig.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.log
+.log.json
+
+# Environment
+.env
+.env*.local
+
+# Editor directories and files
+.idea
+.vscode
+*.sublime-workspace
+*.sublime-project
