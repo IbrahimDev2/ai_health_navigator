@@ -5,7 +5,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "noEmit": true, // Yeh Next.js use karta hai, isko chherne ki zaroorat nahi
+    "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -13,19 +13,22 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    
-    // Yahan zaroori option add kiya gaya hai taake '.ts' extension wale imports kaam karein.
-    "allowImportingTsExtensions": true, 
-    
+    "allowImportingTsExtensions": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      // Yeh path sahi hai, jo firebase folder ko @/ se jorta hai.
-      "@/*": ["./src/*", "./firebase/*"] 
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/firebase/*": ["./firebase/*"],
+      "@/component/*": ["./src/component/*"]
     }
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
