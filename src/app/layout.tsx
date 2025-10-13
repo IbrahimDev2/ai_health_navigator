@@ -1,13 +1,15 @@
+
 'use client'; // <-- YEH FIX HAI!
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-// Import the AuthProvider
+// Import the AuthProvider and the new Header
 import { AuthProvider } from '@/components/AuthProvider';
+import Header from '@/components/Header'; // Header ko import kiya
 
-// Google Fonts ko setup kar rahe hain taake poori website me aek jaisa font استعمال ho
+// Google Fonts ko setup kar rahe hain taake poori website me aek jaisa font istemal ho
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -21,7 +23,7 @@ const geistMono = Geist_Mono({
 // YEH WEBSITE KA SEO METADATA HAI.
 // Yeh Google search results aur browser tab me show hota hai.
 // NOTE: Metadata Client Components me kaam nahi karti, lekin hum isay yahan chor rahe hain.
-// Iska behtar hal Next.js ke naye features me hai, فی الحال isay chaltay rehne dein.
+// Iska behtar hal Next.js ke naye features me hai, filhaal isay chaltay rehne dein.
 // export const metadata: Metadata = {
 //   title: "AI Health Navigator",
 //   description: "Your personal AI-powered health assistant",
@@ -36,11 +38,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900`}
       >
-        {/* Wrap the entire application with the AuthProvider */}
+        {/* Poori application ko AuthProvider se wrap kiya */}
         <AuthProvider>
-          {children}
+          <div className="flex flex-col min-h-screen">
+            {/* Header ko yahan daala taake yeh har page par nazar aaye */}
+            <Header />
+            {/* children (yani hamara current page) ko main content area me render kiya */}
+            <main className="flex-grow container mx-auto px-4 py-8">
+              {children}
+            </main>
+          </div>
         </AuthProvider>
       </body>
     </html>
