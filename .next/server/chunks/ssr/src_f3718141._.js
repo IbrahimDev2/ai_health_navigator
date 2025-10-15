@@ -179,16 +179,19 @@ function DiagnosePage() {
             if (!specialist) {
                 throw new Error('Could not determine the required specialist.');
             }
-            router.push(`/doctors/search?specialist=${encodeURIComponent(specialist)}`);
+            // Pass the original symptoms to the search page as a query parameter
+            const searchParams = new URLSearchParams({
+                specialist: specialist,
+                symptoms: symptoms // Add the symptoms here
+            });
+            router.push(`/doctors/search?${searchParams.toString()}`);
         } catch (error) {
             setError(error.message);
         } finally{
             setLoading(false);
         }
     };
-    return(// The outer 'main' tag with 'min-h-screen' has been removed.
-    // The content is now centered within the layout provided by layout.tsx.
-    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex flex-col items-center justify-center",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
             className: "w-full max-w-2xl bg-gray-800 border-gray-700 mt-8",
@@ -291,7 +294,7 @@ function DiagnosePage() {
         fileName: "[project]/src/app/diagnose/page.tsx",
         lineNumber: 63,
         columnNumber: 5
-    }, this));
+    }, this);
 }
 }),
 ];

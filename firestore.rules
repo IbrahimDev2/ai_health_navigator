@@ -1,19 +1,8 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Rule 1: 'doctors' collection ko koi bhi logged-in user parh sakta hai.
-    // Lekin is mein koi likh (write) nahi sakta.
-    match /doctors/{doctorId} {
-      allow read: if request.auth != null;
-      allow write: if false; // Taa ke koi ghalti se doctors na badal de
-    }
-
-    // Default Rule: Baaqi tamam collections ko koi bhi access na kar sake
-    // Yeh security ke liye zaroori hai.
     match /{document=**} {
-      allow read, write: if false;
+      allow read, write: if request.auth != null;
     }
   }
 }

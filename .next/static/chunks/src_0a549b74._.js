@@ -137,86 +137,92 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AuthProvider$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/AuthProvider.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/card.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/button.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$firebase$2f$firestore$2f$dist$2f$esm$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/firebase/firestore/dist/esm/index.esm.js [app-client] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@firebase/firestore/dist/index.esm.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/firebase.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 ;
 ;
-const dummyAppointments = [
-    {
-        id: '1',
-        doctorName: 'Dr. Tariq Khan',
-        specialty: 'Cardiologist',
-        appointmentTime: '10:00 AM, Oct 28, 2025',
-        createdAt: new Date().toISOString()
-    },
-    {
-        id: '2',
-        doctorName: 'Dr. Ayesha Ahmed',
-        specialty: 'Dermatologist',
-        appointmentTime: '02:30 PM, Oct 29, 2025',
-        createdAt: new Date().toISOString()
-    },
-    {
-        id: '3',
-        doctorName: 'Dr. Hassan Malik',
-        specialty: 'Neurologist',
-        appointmentTime: '11:00 AM, Nov 1, 2025',
-        createdAt: new Date().toISOString()
-    }
-];
+;
+;
+;
 function HistoryPage() {
     _s();
     const { user, loading: authLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AuthProvider$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
-    const [appointments, setAppointments] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [history, setHistory] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    const fetchAppointments = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
-        "HistoryPage.useCallback[fetchAppointments]": async ()=>{
-            if (!user) {
-                setLoading(false);
-                return;
-            }
-            setLoading(true);
-            setError(null);
-            try {
-                await new Promise({
-                    "HistoryPage.useCallback[fetchAppointments]": (resolve)=>setTimeout(resolve, 1000)
-                }["HistoryPage.useCallback[fetchAppointments]"]);
-                setAppointments(dummyAppointments);
-            } catch (err) {
-                console.error("Error fetching appointments: ", err);
-                if (err.code === 'failed-precondition') {
-                    setError("Could not connect to the database. This feature is temporarily unavailable.");
-                } else {
-                    setError("Failed to fetch your appointments.");
-                }
-            } finally{
-                setLoading(false);
-            }
-        }
-    }["HistoryPage.useCallback[fetchAppointments]"], [
-        user
-    ]);
+    const [deletingId, setDeletingId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "HistoryPage.useEffect": ()=>{
+            const fetchHistory = {
+                "HistoryPage.useEffect.fetchHistory": async ()=>{
+                    if (!user) {
+                        setLoading(false);
+                        setHistory([]);
+                        return;
+                    }
+                    setLoading(true);
+                    setError(null);
+                    try {
+                        const historyRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["collection"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["db"], 'history');
+                        const q = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["query"])(historyRef, (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["where"])("userId", "==", user.uid), (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["orderBy"])("createdAt", "desc"));
+                        const querySnapshot = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getDocs"])(q);
+                        const fetchedHistory = [];
+                        querySnapshot.forEach({
+                            "HistoryPage.useEffect.fetchHistory": (doc)=>{
+                                const data = doc.data();
+                                fetchedHistory.push({
+                                    id: doc.id,
+                                    searchTerm: data.searchTerm,
+                                    symptoms: data.symptoms,
+                                    response: data.response || [],
+                                    createdAt: data.createdAt
+                                });
+                            }
+                        }["HistoryPage.useEffect.fetchHistory"]);
+                        setHistory(fetchedHistory);
+                    } catch (err) {
+                        console.error("Error fetching history: ", err);
+                        setError("Failed to fetch search history. Please ensure you have created the required Firestore index.");
+                    } finally{
+                        setLoading(false);
+                    }
+                }
+            }["HistoryPage.useEffect.fetchHistory"];
             if (!authLoading) {
-                fetchAppointments();
+                fetchHistory();
             }
         }
     }["HistoryPage.useEffect"], [
         user,
-        authLoading,
-        fetchAppointments
+        authLoading
     ]);
+    const handleDelete = async (id)=>{
+        setDeletingId(id);
+        setError(null);
+        try {
+            const historyDocRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["doc"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["db"], 'history', id);
+            await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["deleteDoc"])(historyDocRef);
+            setHistory((prevHistory)=>prevHistory.filter((item)=>item.id !== id));
+        } catch (err) {
+            console.error("Error deleting history item: ", err);
+            setError("Failed to delete history item. Please try again.");
+        } finally{
+            setDeletingId(null);
+        }
+    };
     if (authLoading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
             className: "text-center mt-12",
             children: "Loading user data..."
         }, void 0, false, {
             fileName: "[project]/src/app/history/page.tsx",
-            lineNumber: 80,
+            lineNumber: 92,
             columnNumber: 12
         }, this);
     }
@@ -225,15 +231,15 @@ function HistoryPage() {
             className: "flex flex-col items-center justify-center p-8 text-white",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 className: "text-center text-red-500",
-                children: "Please log in to view your appointment history."
+                children: "Please log in to view your search history."
             }, void 0, false, {
                 fileName: "[project]/src/app/history/page.tsx",
-                lineNumber: 86,
+                lineNumber: 98,
                 columnNumber: 14
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/app/history/page.tsx",
-            lineNumber: 85,
+            lineNumber: 97,
             columnNumber: 9
         }, this);
     }
@@ -242,113 +248,235 @@ function HistoryPage() {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                 className: "text-3xl font-bold mb-6 text-center text-blue-400",
-                children: "My Appointments"
+                children: "Search History"
             }, void 0, false, {
                 fileName: "[project]/src/app/history/page.tsx",
-                lineNumber: 93,
+                lineNumber: 105,
                 columnNumber: 7
             }, this),
             loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 className: "text-center mt-12",
-                children: "Loading your appointments..."
+                children: "Loading your search history..."
             }, void 0, false, {
                 fileName: "[project]/src/app/history/page.tsx",
-                lineNumber: 96,
+                lineNumber: 108,
                 columnNumber: 9
             }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 className: "text-center text-red-500 mt-12",
                 children: error
             }, void 0, false, {
                 fileName: "[project]/src/app/history/page.tsx",
-                lineNumber: 98,
+                lineNumber: 110,
                 columnNumber: 11
-            }, this) : appointments.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+            }, this) : history.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 className: "text-center text-gray-400 mt-12",
-                children: "You have no upcoming or past appointments."
+                children: "You have no search history yet."
             }, void 0, false, {
                 fileName: "[project]/src/app/history/page.tsx",
-                lineNumber: 100,
+                lineNumber: 112,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "space-y-4",
-                children: appointments.map((app)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                        className: "bg-gray-800 border-gray-700",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
-                            className: "p-4 flex justify-between items-center",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "space-y-6",
+                children: history.map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
+                        className: "bg-gray-800 border-gray-700 overflow-hidden",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardHeader"], {
+                                className: "p-4 bg-gray-750 border-b border-gray-600",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex justify-between items-start",
                                     children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                            className: "text-lg font-bold text-white",
-                                            children: app.doctorName
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "flex-grow",
+                                            children: item.symptoms ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                        className: "text-lg font-semibold text-gray-300",
+                                                        children: "Your Symptoms:"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/history/page.tsx",
+                                                        lineNumber: 122,
+                                                        columnNumber: 33
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-xl font-bold text-white mb-2",
+                                                        children: [
+                                                            '"',
+                                                            item.symptoms,
+                                                            '"'
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/app/history/page.tsx",
+                                                        lineNumber: 123,
+                                                        columnNumber: 33
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                        className: "text-md font-semibold text-gray-400",
+                                                        children: [
+                                                            "Recommended Specialist: ",
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "font-bold text-blue-300",
+                                                                children: item.searchTerm
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/history/page.tsx",
+                                                                lineNumber: 124,
+                                                                columnNumber: 109
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/app/history/page.tsx",
+                                                        lineNumber: 124,
+                                                        columnNumber: 33
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/app/history/page.tsx",
+                                                lineNumber: 121,
+                                                columnNumber: 29
+                                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                className: "text-xl font-bold text-white",
+                                                children: [
+                                                    'Specialist Searched: "',
+                                                    item.searchTerm,
+                                                    '"'
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/app/history/page.tsx",
+                                                lineNumber: 127,
+                                                columnNumber: 29
+                                            }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/history/page.tsx",
-                                            lineNumber: 107,
+                                            lineNumber: 119,
                                             columnNumber: 23
                                         }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-sm text-blue-300",
-                                            children: app.specialty
-                                        }, void 0, false, {
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-right flex-shrink-0 ml-4",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: "text-sm text-gray-400 mb-2",
+                                                    children: new Date(item.createdAt.seconds * 1000).toLocaleString()
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/history/page.tsx",
+                                                    lineNumber: 131,
+                                                    columnNumber: 25
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                                    variant: "destructive",
+                                                    size: "sm",
+                                                    onClick: ()=>handleDelete(item.id),
+                                                    disabled: deletingId === item.id,
+                                                    children: deletingId === item.id ? 'Deleting...' : 'Delete'
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/history/page.tsx",
+                                                    lineNumber: 132,
+                                                    columnNumber: 25
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
                                             fileName: "[project]/src/app/history/page.tsx",
-                                            lineNumber: 108,
+                                            lineNumber: 130,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/history/page.tsx",
-                                    lineNumber: 106,
-                                    columnNumber: 19
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "text-right",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-md text-gray-200",
-                                            children: app.appointmentTime.split(', ')[0]
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/app/history/page.tsx",
-                                            lineNumber: 111,
-                                            columnNumber: 23
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-sm text-gray-400",
-                                            children: app.appointmentTime.split(', ')[1]
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/app/history/page.tsx",
-                                            lineNumber: 112,
-                                            columnNumber: 23
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/app/history/page.tsx",
-                                    lineNumber: 110,
+                                    lineNumber: 118,
                                     columnNumber: 19
                                 }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/app/history/page.tsx",
-                            lineNumber: 105,
-                            columnNumber: 15
-                        }, this)
-                    }, app.id, false, {
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/history/page.tsx",
+                                lineNumber: 117,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
+                                className: "p-4",
+                                children: item.response && item.response.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                            className: "text-lg font-semibold text-blue-300 mb-3",
+                                            children: "Doctors Found:"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/history/page.tsx",
+                                            lineNumber: 146,
+                                            columnNumber: 25
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                                            children: item.response.map((doctor)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "bg-gray-900 p-3 rounded-lg border border-gray-700",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "font-bold text-white",
+                                                            children: doctor.name
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/history/page.tsx",
+                                                            lineNumber: 150,
+                                                            columnNumber: 37
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "text-sm text-gray-300",
+                                                            children: doctor.specialty
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/history/page.tsx",
+                                                            lineNumber: 151,
+                                                            columnNumber: 37
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "text-xs text-gray-400 mt-1",
+                                                            children: doctor.location
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/history/page.tsx",
+                                                            lineNumber: 152,
+                                                            columnNumber: 37
+                                                        }, this)
+                                                    ]
+                                                }, doctor.id, true, {
+                                                    fileName: "[project]/src/app/history/page.tsx",
+                                                    lineNumber: 149,
+                                                    columnNumber: 33
+                                                }, this))
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/history/page.tsx",
+                                            lineNumber: 147,
+                                            columnNumber: 25
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/history/page.tsx",
+                                    lineNumber: 145,
+                                    columnNumber: 21
+                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-gray-400",
+                                    children: "No doctors were found for this search."
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/history/page.tsx",
+                                    lineNumber: 158,
+                                    columnNumber: 21
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/history/page.tsx",
+                                lineNumber: 143,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, item.id, true, {
                         fileName: "[project]/src/app/history/page.tsx",
-                        lineNumber: 104,
+                        lineNumber: 116,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/app/history/page.tsx",
-                lineNumber: 102,
+                lineNumber: 114,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/history/page.tsx",
-        lineNumber: 92,
+        lineNumber: 104,
         columnNumber: 5
     }, this);
 }
-_s(HistoryPage, "uOgjF9FlMkQ/Vw4eFVv7y932u/g=", false, function() {
+_s(HistoryPage, "4qBIs/v9RFs0hRnXSRRA5gN8NWc=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AuthProvider$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
     ];

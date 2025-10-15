@@ -8,9 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-// Note: The main layout container has been removed from this page.
-// The parent layout.tsx now handles the overall page structure.
-
 export default function DiagnosePage() {
   const { user } = useAuth();
   const [symptoms, setSymptoms] = useState('');
@@ -48,7 +45,12 @@ export default function DiagnosePage() {
         throw new Error('Could not determine the required specialist.');
       }
 
-      router.push(`/doctors/search?specialist=${encodeURIComponent(specialist)}`);
+      // Pass the original symptoms to the search page as a query parameter
+      const searchParams = new URLSearchParams({
+        specialist: specialist,
+        symptoms: symptoms // Add the symptoms here
+      });
+      router.push(`/doctors/search?${searchParams.toString()}`);
 
     } catch (error: any) {
       setError(error.message);
@@ -58,8 +60,6 @@ export default function DiagnosePage() {
   };
 
   return (
-    // The outer 'main' tag with 'min-h-screen' has been removed.
-    // The content is now centered within the layout provided by layout.tsx.
     <div className="flex flex-col items-center justify-center">
       <Card className="w-full max-w-2xl bg-gray-800 border-gray-700 mt-8">
         <CardHeader>

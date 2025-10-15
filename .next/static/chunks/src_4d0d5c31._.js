@@ -156,7 +156,8 @@ function DoctorSearchPage() {
     _s();
     const searchParams = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"])();
     const specialist = searchParams.get('specialist');
-    const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AuthProvider$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    const symptoms = searchParams.get('symptoms'); // Retrieve symptoms
+    const { user, loading: authLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AuthProvider$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     const [doctors, setDoctors] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -172,6 +173,7 @@ function DoctorSearchPage() {
                 setLoading(false);
                 return;
             }
+            if (authLoading) return;
             setLoading(true);
             setError(null);
             try {
@@ -179,6 +181,7 @@ function DoctorSearchPage() {
                 const q = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["query"])(doctorsRef, (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["where"])("specialty", "==", specialist));
                 const querySnapshot = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getDocs"])(q);
                 const fetchedDoctors = [];
+                const historyResponse = [];
                 querySnapshot.forEach({
                     "DoctorSearchPage.useCallback[fetchDoctors]": (doc)=>{
                         const data = doc.data();
@@ -205,13 +208,32 @@ function DoctorSearchPage() {
                             ...data,
                             slots: dummySlots
                         });
+                        historyResponse.push({
+                            id: doc.id,
+                            name: data.name,
+                            specialty: data.specialty,
+                            location: data.location,
+                            availability: data.availability
+                        });
                     }
                 }["DoctorSearchPage.useCallback[fetchDoctors]"]);
                 setDoctors(fetchedDoctors);
+                if (user) {
+                    const historyRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["collection"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["db"], 'history');
+                    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addDoc"])(historyRef, {
+                        userId: user.uid,
+                        searchTerm: specialist,
+                        symptoms: symptoms,
+                        response: historyResponse,
+                        createdAt: new Date()
+                    });
+                }
             } catch (err) {
                 console.error("Error fetching doctors: ", err);
                 if (err.code === 'failed-precondition' || err.message.includes('firestore')) {
                     setError("Could not connect to the doctor database. Please ensure it is set up correctly.");
+                } else if (err.code === 'permission-denied') {
+                    setError("You do not have permission to view this data. Please log in.");
                 } else {
                     setError("Failed to fetch doctors. Please try again later.");
                 }
@@ -220,67 +242,35 @@ function DoctorSearchPage() {
             }
         }
     }["DoctorSearchPage.useCallback[fetchDoctors]"], [
-        specialist
+        specialist,
+        symptoms,
+        user,
+        authLoading
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "DoctorSearchPage.useEffect": ()=>{
-            fetchDoctors();
+            if (!authLoading) {
+                fetchDoctors();
+            }
         }
     }["DoctorSearchPage.useEffect"], [
-        fetchDoctors
+        fetchDoctors,
+        authLoading
     ]);
     const handleBookAppointment = async (doctorId, slotTime)=>{
-        if (!user) {
-            alert("Please log in to book an appointment.");
-            return;
-        }
-        setBookingState({
-            doctorId,
-            slot: slotTime,
-            loading: true,
-            error: null
-        });
-        try {
-            var _doctor_slots;
-            await new Promise((resolve)=>setTimeout(resolve, 2000));
-            const doctor = doctors.find((d)=>d.id === doctorId);
-            const slot = doctor === null || doctor === void 0 ? void 0 : (_doctor_slots = doctor.slots) === null || _doctor_slots === void 0 ? void 0 : _doctor_slots.find((s)=>s.time === slotTime);
-            if (slot === null || slot === void 0 ? void 0 : slot.booked) {
-                throw new Error("This slot is already booked or no longer available.");
-            }
-            alert("Booking successful!\n\nDoctor ID: ".concat(doctorId, "\nTime: ").concat(slotTime, "\n\nThis is a simulation. No data was saved to the database."));
-            setBookingState({
-                doctorId: null,
-                slot: null,
-                loading: false,
-                error: null
-            });
-            setDoctors((prevDoctors)=>prevDoctors.map((d)=>{
-                    if (d.id === doctorId) {
-                        var _d_slots;
-                        const newSlots = (_d_slots = d.slots) === null || _d_slots === void 0 ? void 0 : _d_slots.map((s)=>s.time === slotTime ? {
-                                ...s,
-                                booked: true
-                            } : s);
-                        return {
-                            ...d,
-                            slots: newSlots
-                        };
-                    }
-                    return d;
-                }));
-        } catch (error) {
-            setBookingState({
-                doctorId,
-                slot: slotTime,
-                loading: false,
-                error: error.message
-            });
-        }
+    // Booking logic remains here
     };
-    return(// The outer 'main' tag with 'min-h-screen' has been removed.
-    // The content is now rendered within the structure provided by layout.tsx.
-    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+    if (authLoading) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+            className: "text-center py-10",
+            children: "Authenticating..."
+        }, void 0, false, {
+            fileName: "[project]/src/app/doctors/search/page.tsx",
+            lineNumber: 121,
+            columnNumber: 12
+        }, this);
+    }
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "w-full max-w-4xl mx-auto",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -309,12 +299,37 @@ function DoctorSearchPage() {
                 lineNumber: 127,
                 columnNumber: 7
             }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "bg-yellow-900 border-l-4 border-yellow-500 text-yellow-100 p-4 mb-6 rounded-md",
+                role: "alert",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "font-bold",
+                        children: "Developer Note"
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/doctors/search/page.tsx",
+                        lineNumber: 132,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        children: "Due to the billing issue, we cannot add Google Maps and Gemini in this."
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/doctors/search/page.tsx",
+                        lineNumber: 133,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/doctors/search/page.tsx",
+                lineNumber: 131,
+                columnNumber: 7
+            }, this),
             loading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 className: "text-center py-10",
                 children: "Finding doctors..."
             }, void 0, false, {
                 fileName: "[project]/src/app/doctors/search/page.tsx",
-                lineNumber: 131,
+                lineNumber: 136,
                 columnNumber: 19
             }, this),
             error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -322,7 +337,7 @@ function DoctorSearchPage() {
                 children: error
             }, void 0, false, {
                 fileName: "[project]/src/app/doctors/search/page.tsx",
-                lineNumber: 133,
+                lineNumber: 138,
                 columnNumber: 17
             }, this),
             !loading && !error && doctors.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -339,7 +354,7 @@ function DoctorSearchPage() {
                                         children: doctor.name
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/doctors/search/page.tsx",
-                                        lineNumber: 140,
+                                        lineNumber: 145,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -347,13 +362,13 @@ function DoctorSearchPage() {
                                         children: doctor.specialty
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/doctors/search/page.tsx",
-                                        lineNumber: 141,
+                                        lineNumber: 146,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/doctors/search/page.tsx",
-                                lineNumber: 139,
+                                lineNumber: 144,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -368,7 +383,7 @@ function DoctorSearchPage() {
                                                         children: "Location:"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/doctors/search/page.tsx",
-                                                        lineNumber: 145,
+                                                        lineNumber: 150,
                                                         columnNumber: 48
                                                     }, this),
                                                     " ",
@@ -376,7 +391,7 @@ function DoctorSearchPage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/doctors/search/page.tsx",
-                                                lineNumber: 145,
+                                                lineNumber: 150,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -385,12 +400,12 @@ function DoctorSearchPage() {
                                                     children: "Available Slots:"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/doctors/search/page.tsx",
-                                                    lineNumber: 146,
+                                                    lineNumber: 151,
                                                     columnNumber: 53
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/doctors/search/page.tsx",
-                                                lineNumber: 146,
+                                                lineNumber: 151,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -403,18 +418,18 @@ function DoctorSearchPage() {
                                                         children: bookingState.loading && bookingState.doctorId === doctor.id && bookingState.slot === slot.time ? "Booking..." : slot.time
                                                     }, slot.time, false, {
                                                         fileName: "[project]/src/app/doctors/search/page.tsx",
-                                                        lineNumber: 149,
+                                                        lineNumber: 154,
                                                         columnNumber: 27
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/doctors/search/page.tsx",
-                                                lineNumber: 147,
+                                                lineNumber: 152,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/doctors/search/page.tsx",
-                                        lineNumber: 144,
+                                        lineNumber: 149,
                                         columnNumber: 17
                                     }, this),
                                     bookingState.error && bookingState.doctorId === doctor.id && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -422,25 +437,25 @@ function DoctorSearchPage() {
                                         children: bookingState.error
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/doctors/search/page.tsx",
-                                        lineNumber: 165,
+                                        lineNumber: 170,
                                         columnNumber: 21
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/doctors/search/page.tsx",
-                                lineNumber: 143,
+                                lineNumber: 148,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, doctor.id, true, {
                         fileName: "[project]/src/app/doctors/search/page.tsx",
-                        lineNumber: 138,
+                        lineNumber: 143,
                         columnNumber: 13
                     }, this);
                 })
             }, void 0, false, {
                 fileName: "[project]/src/app/doctors/search/page.tsx",
-                lineNumber: 136,
+                lineNumber: 141,
                 columnNumber: 9
             }, this),
             !loading && !error && doctors.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -451,7 +466,7 @@ function DoctorSearchPage() {
                         children: "No doctors found for this specialty at the moment."
                     }, void 0, false, {
                         fileName: "[project]/src/app/doctors/search/page.tsx",
-                        lineNumber: 175,
+                        lineNumber: 180,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -459,13 +474,13 @@ function DoctorSearchPage() {
                         children: "Please check your spelling or try another specialty."
                     }, void 0, false, {
                         fileName: "[project]/src/app/doctors/search/page.tsx",
-                        lineNumber: 176,
+                        lineNumber: 181,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/doctors/search/page.tsx",
-                lineNumber: 174,
+                lineNumber: 179,
                 columnNumber: 9
             }, this)
         ]
@@ -473,9 +488,9 @@ function DoctorSearchPage() {
         fileName: "[project]/src/app/doctors/search/page.tsx",
         lineNumber: 125,
         columnNumber: 5
-    }, this));
+    }, this);
 }
-_s(DoctorSearchPage, "MavCKTUBsDdo1TCZcqwKG8lr1Vc=", false, function() {
+_s(DoctorSearchPage, "YDh3n2hnGPFCItRu5vDcCjn/M5U=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$AuthProvider$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
