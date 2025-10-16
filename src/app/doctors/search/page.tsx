@@ -4,7 +4,7 @@
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, Suspense } from 'react';
 import { collection, query, where, getDocs, doc, writeBatch, Timestamp, getDoc, addDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/components/AuthProvider';
@@ -27,7 +27,7 @@ interface Appointment {
   createdAt: Timestamp;
 }
 
-export default function DoctorSearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const specialist = searchParams.get('specialist');
   const symptoms = searchParams.get('symptoms'); // Retrieve symptoms
@@ -182,5 +182,13 @@ export default function DoctorSearchPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function DoctorSearchPage() {
+  return (
+    <Suspense fallback={<p className="text-center py-10">Loading page...</p>}>
+      <SearchContent />
+    </Suspense>
   );
 }
