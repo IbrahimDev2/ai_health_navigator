@@ -1,7 +1,8 @@
 "use client";
 
-import { GoogleAuthProvider, signInWithRedirect, getAuth } from "firebase/auth";
-import { auth } from "@/lib/firebase"; // <-- YEH LINE THEEK KAR DI GAYI HAI
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useRouter } from 'next/navigation';
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -17,14 +18,14 @@ const GoogleIcon = () => (
 );
 
 const GoogleSignIn = () => {
+  const router = useRouter();
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      // Use signInWithRedirect instead of signInWithPopup
-      await signInWithRedirect(auth, provider);
+      await signInWithPopup(auth, provider);
+      router.push('/');
     } catch (error) { 
-      console.error("Google Sign-In failed to start:", error);
-      // A user-facing message can be shown here if needed
+      console.error("Google Sign-In failed:", error);
     }
   };
 
