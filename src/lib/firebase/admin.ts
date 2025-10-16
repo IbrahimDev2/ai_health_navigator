@@ -1,6 +1,4 @@
 
-import admin from 'firebase-admin';
-
 // This is a stub for the Firestore admin database.
 // In a real production environment, this would be initialized with service account credentials.
 // For this demo, we are creating a placeholder that will prevent the app from crashing at build time.
